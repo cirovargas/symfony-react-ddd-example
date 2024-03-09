@@ -12,13 +12,26 @@ use Symfony\Component\Routing\Annotation\Route;
 class ApiController extends AbstractController
 {
 
-    #[Route('/upload', name: 'api_upload')]
-    public function index(): Response
+    #[Route('/charge-batch-file', name: 'charge_batch_file_upload', methods: ['POST'])]
+    public function upload(): Response
     {
-        return new JsonResponse([
+        return new JsonResponse(
+            [
             'message' => 'Welcome to your new controller!',
             'path' => 'src/Controller/ApiController.php',
-        ]);
+            ]
+        );
+    }
+
+    #[Route('/charge-batch-file', name: 'charge_batch_file_list', methods: ['GET'])]
+    public function list(): Response
+    {
+        return new JsonResponse(
+            [
+            'message' => 'Welcome to your new controller!',
+            'path' => 'src/Controller/ApiController.php',
+            ]
+        );
     }
 
 }
