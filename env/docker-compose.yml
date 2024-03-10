@@ -15,6 +15,7 @@ services:
     volumes:
       - ../back:/app
       - ./php/supervisord.conf:/etc/supervisord.conf
+      - ./php/php.ini:/usr/local/etc/php/php.ini
     restart: unless-stopped
     networks:
       - symfony_ddd

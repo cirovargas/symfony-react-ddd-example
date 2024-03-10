@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace DDD\Model\ChargeBatchFile;
 
-class ChargeBatchFile
+class ChargeBatchFile implements \JsonSerializable
 {
 
     protected ?int $id;
@@ -50,4 +50,14 @@ class ChargeBatchFile
     }
 
 
+    public function jsonSerialize(): mixed
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'status' => $this->status,
+            'path' => $this->path,
+            'createdAt' => $this->createdAt->format('Y-m-d H:i:s')
+        ];
+    }
 }
