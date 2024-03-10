@@ -37,6 +37,8 @@ services:
 
 
     DDD\Application\Service\StorageService: '@App\Service\StorageService'
+    DDD\Application\Event\EventRecorder: '@App\Event\EventRecorder'
+    DDD\Application\Service\Mailer: '@App\Service\Mailer'
 
     DDD\Model\ChargeBatchFile\Repository\ChargeBatchFileRepository: '@App\Repository\ChargeBatchFileRepository'
     DDD\Model\ChargeBatchFile\Service\ChargeBatchFileFactory: '@App\Service\ChargeBatchFileFactory'

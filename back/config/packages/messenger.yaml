@@ -6,6 +6,7 @@ framework:
         buses:
             command.bus:
                 middleware:
+                    - App\Middleware\ReleaseRecordedEventsMiddleware
                     - doctrine_transaction
             query.bus:
                 middleware: ~
@@ -15,10 +16,25 @@ framework:
             # async: '%env(MESSENGER_TRANSPORT_DSN)%'
             # failed: 'doctrine://default?queue_name=failed'
             # sync: 'sync://'
+            failed:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                options:
+                    exchange:
+                        name: failed
+                    queues:
+                        failed: ~
+            process-charge-batch-file:
+                serializer: messenger.transport.symfony_serializer
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                failure_transport: process-charge-batch-file
+                options:
+                    exchange:
+                        name: process-charge-batch-file
+                    queues:
+                        process-charge-batch-file: ~
 
         routing:
-            # Route your messages to the transports
-            # 'App\Message\YourMessage': async
+            'DDD\Model\ChargeBatchFile\Command\ProcessChargeBatchFileCommand': process-charge-batch-file
 
 # when@test:
 #    framework:

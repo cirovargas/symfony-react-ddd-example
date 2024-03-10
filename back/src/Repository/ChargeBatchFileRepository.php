@@ -8,6 +8,11 @@ use DDD\Model\ChargeBatchFile\Repository\ChargeBatchFileRepository as ChargeBatc
 
 class ChargeBatchFileRepository extends AbstractRepository implements ChargeBatchFileRepositoryInterface
 {
+    public function get(int $id): ?ChargeBatchFile
+    {
+        return $this->find($id);
+    }
+
     public function getEntityClassName(): string
     {
         return ChargeBatchFile::class;
