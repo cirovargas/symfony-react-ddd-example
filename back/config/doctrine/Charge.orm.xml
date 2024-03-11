@@ -7,7 +7,7 @@
         <field name="name" type="string" column="name" length="100" nullable="false" />
         <field name="governmentId" type="string" column="government_id" length="14" nullable="false" />
         <field name="email" type="string" column="email" length="50" nullable="false" />
-        <field name="debtAmount" type="decimal" precision="2" scale="8" column="debt_amount" nullable="false" />
+        <field name="debtAmount" type="decimal" precision="10" scale="2" column="debt_amount" nullable="false" />
         <field name="debtDueDate" type="datetime" column="debt_due_date" nullable="false" />
         <field name="debtID" type="string" column="debt_id" length="255" nullable="false" />
         <field name="createdAt" type="datetime" column="created_at" nullable="false"/>

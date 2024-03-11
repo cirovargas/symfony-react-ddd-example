@@ -10,7 +10,7 @@ abstract class AbstractRepository extends ServiceEntityRepository implements Bas
 {
     public function __construct(ManagerRegistry $registry)
     {
-//        dd($registry);
+        //        dd($registry);
         parent::__construct($registry, $this->getEntityClassName());
     }
 

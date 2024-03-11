@@ -25,8 +25,8 @@ class SaveChargeBatchFileHandler
         $file = $this->storageService->save($command->getPathname(), $command->getFilename());
 
         $chargeBatchFile = $this->chargeBatchFileFactory->create(
-            $file->getPathname(),
-            $file->getFilename()
+            $file->getFilename(),
+            $file->getPathname()
         );
 
         $this->chargeBatchFileRepository->save($chargeBatchFile);

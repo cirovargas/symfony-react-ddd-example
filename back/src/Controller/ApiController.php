@@ -22,10 +22,12 @@ class ApiController extends AbstractController
     {
         $file = $request->files->get('file');
 
-        $envelope = $commandBus->dispatch(new SaveChargeBatchFileCommand(
-            $file->getPathname(),
-            $file->getClientOriginalName()
-        ));
+        $envelope = $commandBus->dispatch(
+            new SaveChargeBatchFileCommand(
+                $file->getPathname(),
+                $file->getClientOriginalName()
+            )
+        );
 
         $command = $envelope->last(HandledStamp::class);
 

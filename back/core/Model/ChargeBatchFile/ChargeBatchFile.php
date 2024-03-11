@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 namespace DDD\Model\ChargeBatchFile;
+use DateTime;
 
 class ChargeBatchFile implements \JsonSerializable
 {
@@ -14,14 +15,14 @@ class ChargeBatchFile implements \JsonSerializable
 
     protected string $path;
 
-    protected \DateTimeImmutable $createdAt;
+    protected DateTime $createdAt;
 
     public function __construct(string $name, string $path)
     {
         $this->name = $name;
         $this->path = $path;
         $this->status = ChargeBatchFileStatus::PENDING;
-        $this->createdAt = new \DateTimeImmutable();
+        $this->createdAt = new DateTime();
     }
 
     public function getId(): int
@@ -44,9 +45,19 @@ class ChargeBatchFile implements \JsonSerializable
         return $this->path;
     }
 
-    public function getCreatedAt(): \DateTimeImmutable
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
+    }
+
+    public function failed(): void
+    {
+        $this->status = ChargeBatchFileStatus::FAILED;
+    }
+
+    public function processed(): void
+    {
+        $this->status = ChargeBatchFileStatus::PROCESSED;
     }
 
 

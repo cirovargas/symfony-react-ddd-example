@@ -1,14 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace DDD\Model\Charge;
-use DateTime;
+namespace DDD\Model\Charge\Command;
 
-class Charge
+final class SaveChargeCommand
 {
-
-    protected ?int $id;
-
     protected string $name;
 
     protected string $governmentId;
@@ -17,18 +13,16 @@ class Charge
 
     protected float $debtAmount;
 
-    protected DateTime $debtDueDate;
+    protected \DateTime $debtDueDate;
 
     protected string $debtID;
-
-    protected DateTime $createdAt;
 
     public function __construct(
         string $name,
         string $governmentId,
         string $email,
         float $debtAmount,
-        DateTime $debtDueDate,
+        \DateTime $debtDueDate,
         string $debtID
     ) {
         $this->name = $name;
@@ -37,12 +31,6 @@ class Charge
         $this->debtAmount = $debtAmount;
         $this->debtDueDate = $debtDueDate;
         $this->debtID = $debtID;
-        $this->createdAt = new DateTime();
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 
     public function getName(): string
@@ -65,7 +53,7 @@ class Charge
         return $this->debtAmount;
     }
 
-    public function getDebtDueDate(): DateTime
+    public function getDebtDueDate(): \DateTime
     {
         return $this->debtDueDate;
     }
@@ -73,11 +61,6 @@ class Charge
     public function getDebtID(): string
     {
         return $this->debtID;
-    }
-
-    public function getCreatedAt(): DateTime
-    {
-        return $this->createdAt;
     }
 
 }

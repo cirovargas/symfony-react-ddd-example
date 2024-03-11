@@ -6,6 +6,7 @@ framework:
         buses:
             command.bus:
                 middleware:
+                    - doctrine_ping_connection
                     - App\Middleware\ReleaseRecordedEventsMiddleware
                     - doctrine_transaction
             query.bus:
@@ -32,9 +33,29 @@ framework:
                         name: process-charge-batch-file
                     queues:
                         process-charge-batch-file: ~
+            process-charge:
+                serializer: messenger.transport.symfony_serializer
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                failure_transport: process-charge
+                options:
+                    exchange:
+                        name: process-charge
+                    queues:
+                        process-charge: ~
+            email:
+                serializer: messenger.transport.symfony_serializer
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                failure_transport: email
+                options:
+                    exchange:
+                        name: email
+                    queues:
+                        email: ~
 
         routing:
             'DDD\Model\ChargeBatchFile\Command\ProcessChargeBatchFileCommand': process-charge-batch-file
+            'DDD\Model\Charge\Command\SaveChargeCommand': process-charge
+            'DDD\Model\Charge\Command\SendChargeSavedEmailNotificationCommand': email
 
 # when@test:
 #    framework:
