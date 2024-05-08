@@ -22,8 +22,14 @@ class ProcessChargeBatchFileHandler
 
     public function __invoke(ProcessChargeBatchFileCommand $command): void
     {
+        $chargeBatchFile = $this->chargeBatchFileRepository->get($command->getChargeBatchFileId());
+
         try {
-            $chargeBatchFile = $this->chargeBatchFileRepository->get($command->getChargeBatchFileId());
+
+            if (random_int(1,2) === 1) {
+                throw new \RuntimeException('Random error');
+            }
+
 
             $data = $this->csvReader->csvToArray(
                 $chargeBatchFile->getPath(),
@@ -34,7 +40,6 @@ class ProcessChargeBatchFileHandler
             );
             foreach ($data as $chunk) {
                 $this->parseChunkData($chunk);
-                gc_collect_cycles();
             }
 
             $chargeBatchFile->processed();

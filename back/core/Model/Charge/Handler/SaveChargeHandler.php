@@ -20,6 +20,10 @@ class SaveChargeHandler
 
     public function __invoke(SaveChargeCommand $command): void
     {
+        if (random_int(1,2) === 1) {
+            throw new \RuntimeException('Random error');
+        }
+
         $charge = $this->chargeFactory->create(
             $command->getName(),
             $command->getGovernmentId(),

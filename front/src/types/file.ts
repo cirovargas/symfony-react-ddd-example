@@ -11,7 +11,7 @@ type ReducerAction<T, P> = {
 type FileContextState = {
   isLoading: boolean;
   file: File | null;
-  fileList: File[]; // & {} You can add more information about the challenge inside this type
+  fileList: File[];
 };
 
 type FileAction = ReducerAction<

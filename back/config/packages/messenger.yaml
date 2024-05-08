@@ -27,7 +27,7 @@ framework:
             process-charge-batch-file:
                 serializer: messenger.transport.symfony_serializer
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
-                failure_transport: process-charge-batch-file
+                failure_transport: failed
                 options:
                     exchange:
                         name: process-charge-batch-file
@@ -36,7 +36,7 @@ framework:
             process-charge:
                 serializer: messenger.transport.symfony_serializer
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
-                failure_transport: process-charge
+                failure_transport: failed
                 options:
                     exchange:
                         name: process-charge
@@ -45,7 +45,7 @@ framework:
             email:
                 serializer: messenger.transport.symfony_serializer
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
-                failure_transport: email
+                failure_transport: failed
                 options:
                     exchange:
                         name: email

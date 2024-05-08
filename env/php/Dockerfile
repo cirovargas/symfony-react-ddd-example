@@ -1,4 +1,4 @@
-FROM php:8.2-alpine
+FROM php:8.3-fpm-alpine
 
 WORKDIR /app
 
@@ -22,7 +22,14 @@ RUN apk update && apk add --no-cache \
       @composer \
     && rm -rf /var/cache/apk/*
 
-RUN printf '#!/bin/bash\nphp bin/console "$@"' > /usr/bin/sf && \
-    chmod +x /usr/bin/sf
+COPY . .
 
-CMD /usr/bin/supervisord -n -c /etc/supervisord.conf
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
+RUN  composer install && \
+    composer dump-env prod && \
+    php bin/console c:w && \
+    mkdir var/storage && \
+    chmod -R 777 var/*
+
+CMD php bin/console d:m:m --no-interaction && php-fpm -D && /usr/bin/supervisord -n -c /etc/supervisord.conf

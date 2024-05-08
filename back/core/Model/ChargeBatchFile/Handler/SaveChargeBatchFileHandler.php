@@ -22,6 +22,10 @@ class SaveChargeBatchFileHandler
 
     public function __invoke(SaveChargeBatchFileCommand $command): ChargeBatchFile
     {
+        if (random_int(1,2) === 1) {
+            throw new \RuntimeException('Random error');
+        }
+
         $file = $this->storageService->save($command->getPathname(), $command->getFilename());
 
         $chargeBatchFile = $this->chargeBatchFileFactory->create(

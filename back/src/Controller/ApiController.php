@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Repository\ChargeBatchFileRepository;
 use App\Service\StorageService;
 use DDD\Model\ChargeBatchFile\Command\SaveChargeBatchFileCommand;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -35,14 +36,13 @@ class ApiController extends AbstractController
     }
 
     #[Route('/charge-batch-file', name: 'charge_batch_file_list', methods: ['GET'])]
-    public function list(): Response
+    public function list(ChargeBatchFileRepository $chargeBatchFileRepository): Response
     {
-        return new JsonResponse(
-            [
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/ApiController.php',
-            ]
-        );
+        if (random_int(1,5) === 1) {
+            return new JsonResponse(['error' => 'Random error'], 500);
+        }
+
+        return new JsonResponse($chargeBatchFileRepository->findAll());
     }
 
 }
