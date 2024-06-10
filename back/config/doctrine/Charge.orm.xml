@@ -11,5 +11,9 @@
         <field name="debtDueDate" type="datetime" column="debt_due_date" nullable="false" />
         <field name="debtID" type="string" column="debt_id" length="255" nullable="false" />
         <field name="createdAt" type="datetime" column="created_at" nullable="false"/>
+
+        <many-to-one field="chargeBatchFile" target-entity="App\Entity\ChargeBatchFile" inversed-by="charges">
+            <join-column name="charge_batch_file_id" referenced-column-name="id" />
+        </many-to-one>
     </entity>
 </doctrine-mapping>

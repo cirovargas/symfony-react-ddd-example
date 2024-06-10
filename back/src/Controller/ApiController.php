@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\ChargeBatchFile;
 use App\Repository\ChargeBatchFileRepository;
 use App\Service\StorageService;
 use DDD\Model\ChargeBatchFile\Command\SaveChargeBatchFileCommand;
@@ -21,18 +22,22 @@ class ApiController extends AbstractController
     #[Route('/charge-batch-file', name: 'charge_batch_file_upload', methods: ['POST'])]
     public function upload(Request $request, MessageBusInterface $commandBus): Response
     {
-        $file = $request->files->get('file');
+        try {
+            $file = $request->files->get('file');
 
-        $envelope = $commandBus->dispatch(
-            new SaveChargeBatchFileCommand(
-                $file->getPathname(),
-                $file->getClientOriginalName()
-            )
-        );
+            $envelope = $commandBus->dispatch(
+                new SaveChargeBatchFileCommand(
+                    $file->getPathname(),
+                    $file->getClientOriginalName()
+                )
+            );
 
-        $command = $envelope->last(HandledStamp::class);
+            $command = $envelope->last(HandledStamp::class);
 
-        return new JsonResponse($command->getResult());
+            return new JsonResponse($command->getResult());
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => $e->getMessage()], 500);
+        }
     }
 
     #[Route('/charge-batch-file', name: 'charge_batch_file_list', methods: ['GET'])]
@@ -43,6 +48,16 @@ class ApiController extends AbstractController
         }
 
         return new JsonResponse($chargeBatchFileRepository->findAll());
+    }
+
+    #[Route('/charge-batch-file/{id}/charges', name: 'charge_batch_file_charges', methods: ['GET'])]
+    public function charges(ChargeBatchFile $chargeBatchFile): Response
+    {
+        if (random_int(1,5) === 1) {
+            return new JsonResponse(['error' => 'Random error'], 500);
+        }
+
+        return new JsonResponse($chargeBatchFile->getCharges()->toArray());
     }
 
 }

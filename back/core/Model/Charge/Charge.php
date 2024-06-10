@@ -3,8 +3,9 @@ declare(strict_types=1);
 
 namespace DDD\Model\Charge;
 use DateTime;
+use DDD\Model\ChargeBatchFile\ChargeBatchFile;
 
-class Charge
+class Charge implements \JsonSerializable
 {
 
     protected ?int $id;
@@ -23,7 +24,10 @@ class Charge
 
     protected DateTime $createdAt;
 
+    protected ChargeBatchFile $chargeBatchFile;
+
     public function __construct(
+        ChargeBatchFile $chargeBatchFile,
         string $name,
         string $governmentId,
         string $email,
@@ -31,6 +35,7 @@ class Charge
         DateTime $debtDueDate,
         string $debtID
     ) {
+        $this->chargeBatchFile = $chargeBatchFile;
         $this->name = $name;
         $this->governmentId = $governmentId;
         $this->email = $email;
@@ -78,6 +83,25 @@ class Charge
     public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
+    }
+
+    public function getChargeBatchFile(): ChargeBatchFile
+    {
+        return $this->chargeBatchFile;
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'governmentId' => $this->governmentId,
+            'email' => $this->email,
+            'debtAmount' => $this->debtAmount,
+            'debtDueDate' => $this->debtDueDate->format('Y-m-d'),
+            'debtID' => $this->debtID,
+            'createdAt' => $this->createdAt->format('Y-m-d H:i:s')
+        ];
     }
 
 }

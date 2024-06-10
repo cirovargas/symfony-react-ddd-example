@@ -17,12 +17,15 @@ class ChargeBatchFile implements \JsonSerializable
 
     protected DateTime $createdAt;
 
+    protected iterable $charges;
+
     public function __construct(string $name, string $path)
     {
         $this->name = $name;
         $this->path = $path;
         $this->status = ChargeBatchFileStatus::PENDING;
         $this->createdAt = new DateTime();
+        $this->charges = [];
     }
 
     public function getId(): int
@@ -60,6 +63,10 @@ class ChargeBatchFile implements \JsonSerializable
         $this->status = ChargeBatchFileStatus::PROCESSED;
     }
 
+    public function getCharges(): iterable
+    {
+        return $this->charges;
+    }
 
     public function jsonSerialize(): mixed
     {

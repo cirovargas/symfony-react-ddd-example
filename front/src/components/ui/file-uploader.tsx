@@ -1,6 +1,14 @@
 import React, {useState, useEffect, useRef} from 'react'
 import { toast } from "sonner"
 import { FcApproval, FcHighPriority, FcClock  } from "react-icons/fc";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
 
 // type FileUploaderProps = {
 //   file: File;
@@ -16,6 +24,8 @@ const FileUploader = () => {
 
   const [file, setFile] = useState<File | undefined>(undefined);
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFileProps[]>([]);
+  const [charges, setcharges] = useState<any[]>([]);
+  const [sheetOpen, setSheetOpen] = useState(false)
 
   const ref = useRef();
 
@@ -58,6 +68,20 @@ const FileUploader = () => {
       .catch((error) => {
         console.log(error)
         toast.error("Erro ao buscar os arquivos.")
+      });
+  }
+  const fetchFileCharges = (fileId) => {
+    fetch('http://localhost:3000/api/charge-batch-file/'+fileId+'/charges', {
+      method: 'GET',
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        setcharges(result)
+        setSheetOpen(true)
+      })
+      .catch((error) => {
+        console.log(error)
+        toast.error("Erro ao buscar as transações do arquivo.")
       });
   }
 
@@ -124,7 +148,7 @@ const FileUploader = () => {
             </thead>
             <tbody>
             {uploadedFiles.map((f) => (
-              <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+              <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700" onClick={() => fetchFileCharges(f.id)}>
                 <td className="px-6 py-4">
                   {f.status === 'PROCESSED' && <FcApproval title={'Sucesso'} />}
                   {f.status === 'FAILED' && <FcHighPriority title={'Falha'} />}
@@ -145,7 +169,32 @@ const FileUploader = () => {
           </table>
         </div>
       )}
-
+      <Sheet open={sheetOpen} onOpenChange={(e) => setSheetOpen(e)}>
+        {/*<SheetTrigger>Open</SheetTrigger>*/}
+        <SheetContent>
+          <SheetHeader style={{color: '#FFFFFF'}}>
+            <SheetTitle>Transações</SheetTitle>
+            <SheetDescription>
+            </SheetDescription>
+          </SheetHeader>
+          <div style={{overflow: 'scroll', color: '#FFFFFF', height: '100%'}}>
+            {charges?.length && charges.length > 0 && charges.map((c) => (
+              <div style={{borderBottom: '1px dashed #FFFFFF'}}>
+                {/*<span>{c.id} </span> <br/>*/}
+                <span><b>ID:</b> {c.debtID}</span> <br/>
+                <span><b>Nome:</b> {c.name}</span> <br/>
+                <span><b>Government ID:</b> {c.governmentId}</span> <br/>
+                <span><b>E-mail:</b> {c.email}</span> <br/>
+                <span><b>Valor:</b> {c.debtAmount}</span> <br/>
+                <span><b>Data do débito:</b> {c.debtDueDate}</span> <br/>
+                <span><b>Cadastrado em:</b> {c.createdAt}</span> <br/><br/>
+                {/*<span>{c.name}</span>*/}
+                {/*<span>{c.status}</span>*/}
+              </div>
+            ))}
+          </div>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 };

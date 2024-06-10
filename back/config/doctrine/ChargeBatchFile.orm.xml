@@ -20,5 +20,6 @@
             </options>
         </field>
         <field name="createdAt" type="datetime" column="created_at" nullable="false"/>
+        <one-to-many field="charges" target-entity="App\Entity\Charge" mapped-by="chargeBatchFile"/>
     </entity>
 </doctrine-mapping>

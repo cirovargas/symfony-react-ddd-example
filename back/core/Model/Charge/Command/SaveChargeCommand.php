@@ -5,6 +5,8 @@ namespace DDD\Model\Charge\Command;
 
 final class SaveChargeCommand
 {
+    protected int $chargeBatchFileId;
+
     protected string $name;
 
     protected string $governmentId;
@@ -18,6 +20,7 @@ final class SaveChargeCommand
     protected string $debtID;
 
     public function __construct(
+        int $chargeBatchFileId,
         string $name,
         string $governmentId,
         string $email,
@@ -25,12 +28,18 @@ final class SaveChargeCommand
         \DateTime $debtDueDate,
         string $debtID
     ) {
+        $this->chargeBatchFileId = $chargeBatchFileId;
         $this->name = $name;
         $this->governmentId = $governmentId;
         $this->email = $email;
         $this->debtAmount = $debtAmount;
         $this->debtDueDate = $debtDueDate;
         $this->debtID = $debtID;
+    }
+
+    public function getChargeBatchFileId(): int
+    {
+        return $this->chargeBatchFileId;
     }
 
     public function getName(): string

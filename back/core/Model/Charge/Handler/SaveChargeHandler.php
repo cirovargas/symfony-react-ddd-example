@@ -7,12 +7,14 @@ use DDD\Model\Charge\Command\SaveChargeCommand;
 use DDD\Model\Charge\Event\ChargeWasSaved;
 use DDD\Model\Charge\Repository\ChargeRepository;
 use DDD\Model\Charge\Service\ChargeFactory;
+use DDD\Model\ChargeBatchFile\Repository\ChargeBatchFileRepository;
 
 class SaveChargeHandler
 {
 
     public function __construct(
         private ChargeRepository $chargeRepository,
+        private ChargeBatchFileRepository $chargeBatchFileRepository,
         private ChargeFactory $chargeFactory,
         private EventRecorder $eventRecorder
     ) {
@@ -24,7 +26,10 @@ class SaveChargeHandler
             throw new \RuntimeException('Random error');
         }
 
+        $chargeBatchFile = $this->chargeBatchFileRepository->get($command->getChargeBatchFileId());
+
         $charge = $this->chargeFactory->create(
+            $chargeBatchFile,
             $command->getName(),
             $command->getGovernmentId(),
             $command->getEmail(),

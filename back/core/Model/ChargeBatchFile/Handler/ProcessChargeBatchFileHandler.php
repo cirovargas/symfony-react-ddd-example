@@ -6,6 +6,7 @@ namespace DDD\Model\ChargeBatchFile\Handler;
 use DDD\Application\Service\CsvReader;
 use DDD\Application\Service\StorageService;
 use DDD\Model\Charge\Command\SaveChargeCommand;
+use DDD\Model\ChargeBatchFile\ChargeBatchFile;
 use DDD\Model\ChargeBatchFile\Command\ProcessChargeBatchFileCommand;
 use DDD\Model\ChargeBatchFile\Repository\ChargeBatchFileRepository;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -39,7 +40,7 @@ class ProcessChargeBatchFileHandler
                 true
             );
             foreach ($data as $chunk) {
-                $this->parseChunkData($chunk);
+                $this->parseChunkData($chargeBatchFile, $chunk);
             }
 
             $chargeBatchFile->processed();
@@ -52,14 +53,14 @@ class ProcessChargeBatchFileHandler
         }
     }
 
-    private function parseChunkData(array $chunk): void
+    private function parseChunkData(ChargeBatchFile $chargeBatchFile, array $chunk): void
     {
         foreach ($chunk as $charge) {
-            $this->dispatchCharge($charge);
+            $this->dispatchCharge($chargeBatchFile, $charge);
         }
     }
 
-    private function dispatchCharge(array $charge): void
+    private function dispatchCharge(ChargeBatchFile $chargeBatchFile,array $charge): void
     {
         if(!isset($charge['A'])) {
             echo "Invalid charge data".PHP_EOL;
@@ -68,6 +69,7 @@ class ProcessChargeBatchFileHandler
 
         $this->commandBus->dispatch(
             new SaveChargeCommand(
+                $chargeBatchFile->getId(),
                 $charge['A'],
                 $charge['B'],
                 $charge['C'],
