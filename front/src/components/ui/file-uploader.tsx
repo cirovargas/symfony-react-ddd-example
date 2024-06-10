@@ -76,10 +76,15 @@ const FileUploader = () => {
     })
       .then((response) => response.json())
       .then((result) => {
+        if (result?.error) {
+          toast.error("Erro ao buscar as transações do arquivo.")
+          return;
+        }
         setcharges(result)
         setSheetOpen(true)
       })
       .catch((error) => {
+        console.log('EITA')
         console.log(error)
         toast.error("Erro ao buscar as transações do arquivo.")
       });
@@ -169,7 +174,10 @@ const FileUploader = () => {
           </table>
         </div>
       )}
-      <Sheet open={sheetOpen} onOpenChange={(e) => setSheetOpen(e)}>
+      <Sheet open={sheetOpen} onOpenChange={(e) => {
+        setSheetOpen(e)
+        setcharges([])
+      }}>
         {/*<SheetTrigger>Open</SheetTrigger>*/}
         <SheetContent>
           <SheetHeader style={{color: '#FFFFFF'}}>
