@@ -26,12 +26,12 @@ RUN apk update && apk add --no-cache \
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
 RUN mkdir -p /app/var/cache /app/var/log /app/var/storage && chmod -R 777 /app/var/*
-# COPY . .
-# RUN  composer install && \
-#     composer dump-env prod && \
-#     php bin/console c:w && \
-#     mkdir var/storage && \
-#     chmod -R 777 var/*
+COPY . .
+RUN  composer install && \
+  composer dump-env prod && \
+  php bin/console c:w && \
+  mkdir var/storage && \
+  chmod -R 777 var/*
 
-# CMD php bin/console d:m:m --no-interaction && php-fpm -D && /usr/bin/supervisord -n -c /etc/supervisord.conf
+CMD php bin/console d:m:m --no-interaction && php-fpm -D && /usr/bin/supervisord -n -c /etc/supervisord.conf
 #CMD php-fpm -D && /usr/bin/supervisord -n -c /etc/supervisord.conf
