@@ -25,7 +25,6 @@ RUN apk update && apk add --no-cache \
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
-RUN mkdir -p /app/var/cache /app/var/log /app/var/storage && chmod -R 777 /app/var/*
 COPY . .
 RUN  composer install && \
   composer dump-env prod && \

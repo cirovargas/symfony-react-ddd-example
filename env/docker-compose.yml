@@ -13,7 +13,7 @@ services:
       - rabbitmq:rabbitmq
       - postgres:postgres
     volumes:
-      - ../back:/app
+#      - ../back:/app
       - ./php/supervisord.conf:/etc/supervisord.conf
       - ./php/php.ini:/usr/local/etc/php/php.ini
     restart: unless-stopped
