@@ -17,7 +17,7 @@ class SendChargeSavedEmailNotificationHandler
 
     public function __invoke(SendChargeSavedEmailNotificationCommand $command): void
     {
-        if (random_int(1,2) === 1) {
+        if (random_int(1,3) === 1) {
             throw new \RuntimeException('Random error');
         }
 

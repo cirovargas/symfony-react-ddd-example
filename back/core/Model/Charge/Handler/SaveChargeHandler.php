@@ -22,7 +22,7 @@ class SaveChargeHandler
 
     public function __invoke(SaveChargeCommand $command): void
     {
-        if (random_int(1,2) === 1) {
+        if (random_int(1,3) === 1) {
             throw new \RuntimeException('Random error');
         }
 
